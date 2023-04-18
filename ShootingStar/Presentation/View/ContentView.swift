@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Charts
 
 struct ContentView<CVM: ContentViewModel>: View {
     @StateObject private var viewModel: CVM
@@ -15,7 +16,7 @@ struct ContentView<CVM: ContentViewModel>: View {
     }
 
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 16) {
             List(viewModel.songs) { song in
                 HStack(alignment: .top) {
                     Image(systemName: "music.note.list")
@@ -40,6 +41,17 @@ struct ContentView<CVM: ContentViewModel>: View {
             } label: {
                 Image(systemName: "stop.circle")
                     .imageScale(.large)
+            }
+            Chart {
+                ForEach(0 ..< 2048, id: \.self) { index in
+                    BarMark(x: .value("x", index),
+                            y: .value("p",  -viewModel.values[index]))
+                }
+            }
+            .chartXScale(domain: 0 ... 2048)
+            .chartYScale(domain: 0 ... 250)
+            .chartYAxis {
+                AxisMarks(position: .leading)
             }
         }
         .padding(16)
