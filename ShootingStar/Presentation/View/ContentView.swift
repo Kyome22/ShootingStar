@@ -45,14 +45,14 @@ struct ContentView<CVM: ContentViewModel>: View {
             Chart {
                 ForEach(0 ..< 2048, id: \.self) { index in
                     BarMark(x: .value("x", index),
-                            y: .value("p",  -viewModel.values[index]))
+                            y: .value("p",  128 + viewModel.values[index]),
+                            width: .fixed(1))
                 }
             }
             .chartXScale(domain: 0 ... 2048)
+            .chartXAxis(.hidden)
             .chartYScale(domain: 0 ... 250)
-            .chartYAxis {
-                AxisMarks(position: .leading)
-            }
+            .chartYAxis(.hidden)
         }
         .padding(16)
     }

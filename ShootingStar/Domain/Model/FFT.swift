@@ -11,7 +11,7 @@ import Accelerate
 typealias FloatPointer = UnsafeMutablePointer<Float>
 
 protocol FFT: AnyObject {
-    func computeFFT(_ inAudioData: UnsafePointer<Float>?) -> [Float]
+    func computeFFT(_ inAudioData: UnsafePointer<Float>?, count: Int) -> [Float]
 }
 
 final class FFTImpl: FFT {
@@ -24,7 +24,7 @@ final class FFTImpl: FFT {
 
     init(maxFramesPerSlice: Int) {
         mFFTNormFactor = 1.0 / Float(2 * maxFramesPerSlice)
-        mFFTLength = vDSP_Length(maxFramesPerSlice) / 2
+        mFFTLength = vDSP_Length(maxFramesPerSlice / 2)
         mLog2N = vDSP_Length(32 - UInt32((UInt32(maxFramesPerSlice) - 1).leadingZeroBitCount))
         mDSPSplitComplex = DSPSplitComplex(
             realp: UnsafeMutablePointer.allocate(capacity: Int(mFFTLength)),
@@ -39,11 +39,11 @@ final class FFTImpl: FFT {
         mDSPSplitComplex.imagp.deallocate()
     }
 
-    func computeFFT(_ inAudioData: UnsafePointer<Float>?) -> [Float] {
-        let outFFTData = FloatPointer.allocate(capacity: 2048)
-        bzero(outFFTData, size_t(2048 * MemoryLayout<Float>.size))
+    func computeFFT(_ inAudioData: UnsafePointer<Float>?, count: Int) -> [Float] {
+        let outFFTData = FloatPointer.allocate(capacity: count)
+        bzero(outFFTData, size_t(count * MemoryLayout<Float>.size))
         guard let inAudioData, let mSpectrumAnalysis else {
-            return Array(repeating: 0, count: 2048)
+            return Array(repeating: 0, count: count)
         }
         let mFFTFullLength: vDSP_Length = 2 * mFFTLength
         let window = FloatPointer.allocate(capacity: Int(mFFTFullLength))
@@ -58,10 +58,10 @@ final class FFTImpl: FFT {
         vDSP_vsmul(mDSPSplitComplex.imagp, 1, &mFFTNormFactor, mDSPSplitComplex.imagp, 1, mFFTLength)
         mDSPSplitComplex.imagp[0] = .zero
         vDSP_zvmags(&mDSPSplitComplex, 1, outFFTData, 1, mFFTLength)
-
         vDSP_vsadd(outFFTData, 1, &kAdjust0DB, outFFTData, 1, mFFTLength)
         var one: Float = 1
         vDSP_vdbcon(outFFTData, 1, &one, outFFTData, 1, mFFTLength, 0)
-        return Array<Float>(UnsafeBufferPointer(start: outFFTData, count: 2048))
+        // minimum value equal -128dB ???
+        return Array<Float>(UnsafeBufferPointer(start: outFFTData, count: count))
     }
 }

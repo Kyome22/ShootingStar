@@ -71,7 +71,7 @@ final class ContentViewModelImpl: ContentViewModel {
         let bfr = UnsafePointer(data.pointee)
         Task { @MainActor [weak self] in
             if let self {
-                self.values = self.fft.computeFFT(bfr)
+                self.values = self.fft.computeFFT(bfr, count: 2048)
             }
         }
     }
