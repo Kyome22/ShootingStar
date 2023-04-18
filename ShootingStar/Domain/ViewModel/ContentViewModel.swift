@@ -21,7 +21,8 @@ protocol ContentViewModel: ObservableObject {
 
 final class ContentViewModelImpl: ContentViewModel {
     @Published var songs: [MusicItem] = []
-    private var audioPlayer: AVAudioPlayer?
+    private lazy var playerNode = AVAudioPlayerNode()
+    private lazy var audioEngine = AVAudioEngine()
 
     init() {
         do {
@@ -30,6 +31,7 @@ final class ContentViewModelImpl: ContentViewModel {
         } catch {
             logput(error.localizedDescription)
         }
+        audioEngine.attach(playerNode)
     }
 
     func requestAuthorization() {
@@ -62,8 +64,13 @@ final class ContentViewModelImpl: ContentViewModel {
     func playMusic(song: MusicItem) {
         if let assetURl = song.assetURL {
             do {
-                audioPlayer = try AVAudioPlayer(contentsOf: assetURl)
-                audioPlayer?.play()
+                let audioFile = try AVAudioFile(forReading: assetURl)
+                audioEngine.connect(playerNode,
+                                    to: audioEngine.mainMixerNode,
+                                    format: audioFile.processingFormat)
+                playerNode.scheduleFile(audioFile, at: nil)
+                try audioEngine.start()
+                playerNode.play()
             } catch {
                 logput(error.localizedDescription)
             }
@@ -71,8 +78,9 @@ final class ContentViewModelImpl: ContentViewModel {
     }
 
     func stopMusic() {
-        if audioPlayer?.isPlaying == true {
-            audioPlayer?.stop()
+        if audioEngine.isRunning && playerNode.isPlaying {
+            playerNode.stop()
+            audioEngine.stop()
         }
     }
 }
