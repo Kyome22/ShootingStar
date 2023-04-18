@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+
+# ScreenPointer
+materials/
+
+# Xcode
+xcuserdata/
+*.xcuserstate
+*.xccheckout
