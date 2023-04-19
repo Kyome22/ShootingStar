@@ -11,7 +11,7 @@ import Accelerate
 typealias FloatPointer = UnsafeMutablePointer<Float>
 
 protocol FFT: AnyObject {
-    func computeFFT(_ inAudioData: UnsafePointer<Float>?, count: Int) -> [Float]
+    func computeFFT(_ inAudioData: UnsafePointer<Float>, count: Int) -> [Float]
 }
 
 final class FFTImpl: FFT {
@@ -25,7 +25,7 @@ final class FFTImpl: FFT {
     init(maxFramesPerSlice: Int) {
         mFFTNormFactor = 1.0 / Float(2 * maxFramesPerSlice)
         mFFTLength = vDSP_Length(maxFramesPerSlice / 2)
-        mLog2N = vDSP_Length(32 - UInt32((UInt32(maxFramesPerSlice) - 1).leadingZeroBitCount))
+        mLog2N = vDSP_Length(32 - UInt32(maxFramesPerSlice - 1).leadingZeroBitCount)
         mDSPSplitComplex = DSPSplitComplex(
             realp: UnsafeMutablePointer.allocate(capacity: Int(mFFTLength)),
             imagp: UnsafeMutablePointer.allocate(capacity: Int(mFFTLength))
@@ -39,15 +39,19 @@ final class FFTImpl: FFT {
         mDSPSplitComplex.imagp.deallocate()
     }
 
-    func computeFFT(_ inAudioData: UnsafePointer<Float>?, count: Int) -> [Float] {
+    func computeFFT(_ inAudioData: UnsafePointer<Float>, count: Int) -> [Float] {
         let outFFTData = FloatPointer.allocate(capacity: count)
         bzero(outFFTData, size_t(count * MemoryLayout<Float>.size))
-        guard let inAudioData, let mSpectrumAnalysis else {
+        guard let mSpectrumAnalysis else {
             return Array(repeating: 0, count: count)
         }
         let mFFTFullLength: vDSP_Length = 2 * mFFTLength
         let window = FloatPointer.allocate(capacity: Int(mFFTFullLength))
+
         vDSP_blkman_window(window, mFFTFullLength, 0)
+        // vDSP_hamm_window(window, mFFTFullLength, 0)
+        // vDSP_hann_window(window, mFFTFullLength, 0)
+
         let windowAudioData = FloatPointer.allocate(capacity: Int(mFFTFullLength))
         vDSP_vmul(inAudioData, 1, window, 1, windowAudioData, 1, mFFTFullLength)
         windowAudioData.withMemoryRebound(to: DSPComplex.self, capacity: Int(mFFTLength)) { pointer in

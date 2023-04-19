@@ -10,9 +10,13 @@ import AVFoundation
 import Foundation
 import MediaPlayer
 
+let SAMPLING: Int = 2048
+let SAMPLING_HALF: Int = 1024
+
 protocol ContentViewModel: ObservableObject {
     var songs: [MusicItem] { get set }
     var values: [Float] { get set }
+    var rmsValue: Double { get set }
 
     init()
     func requestAuthorization()
@@ -23,13 +27,15 @@ protocol ContentViewModel: ObservableObject {
 final class ContentViewModelImpl: ContentViewModel {
     @Published var songs: [MusicItem] = []
     @Published var values: [Float]
+    @Published var rmsValue: Double = 0.3
 
     private lazy var playerNode = AVAudioPlayerNode()
     private lazy var audioEngine = AVAudioEngine()
-    private let fft = FFTImpl(maxFramesPerSlice: 4096)
+    private let fft = FFTImpl(maxFramesPerSlice: SAMPLING)
+    private let signal = SignalImpl()
 
     init() {
-        values = Array<Float>(repeating: 0, count: 2048)
+        values = Array<Float>(repeating: 0, count: SAMPLING_HALF)
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback)
             try AVAudioSession.sharedInstance().setActive(true)
@@ -66,12 +72,14 @@ final class ContentViewModelImpl: ContentViewModel {
         }
     }
 
-    private func callFFT(_ buffer: AVAudioPCMBuffer) {
+    private func calculate(_ buffer: AVAudioPCMBuffer) {
         guard let data = buffer.floatChannelData else { return }
+        let frameLength = UInt(buffer.frameLength)
         let bfr = UnsafePointer(data.pointee)
         Task { @MainActor [weak self] in
             if let self {
-                self.values = self.fft.computeFFT(bfr, count: 2048)
+                self.values = self.fft.computeFFT(bfr, count: SAMPLING_HALF)
+                self.rmsValue = self.signal.computeRMS(bfr, frameLength: frameLength)
             }
         }
     }
@@ -86,10 +94,10 @@ final class ContentViewModelImpl: ContentViewModel {
                                     format: audioFile.processingFormat)
                 playerNode.installTap(
                     onBus: 0,
-                    bufferSize: 4096,
+                    bufferSize: AVAudioFrameCount(SAMPLING),
                     format: audioFile.processingFormat
                 ) { [weak self] buffer, _ in
-                    self?.callFFT(buffer)
+                    self?.calculate(buffer)
                 }
                 playerNode.scheduleFile(audioFile, at: nil)
                 try audioEngine.start()
@@ -114,6 +122,7 @@ extension PreviewMock {
     final class ContentViewModelMock: ContentViewModel {
         @Published var songs: [MusicItem] = []
         @Published var values: [Float] = []
+        @Published var rmsValue: Double = 0.3
 
         init() {}
         func requestAuthorization() {}

@@ -17,6 +17,7 @@
 		1C2323AF29EF0A32002AB7B8 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2323AD29EF0A32002AB7B8 /* String+Extensions.swift */; };
 		1C2323B229EF0ACE002AB7B8 /* MusicItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2323B129EF0ACE002AB7B8 /* MusicItem.swift */; };
 		1C2323B429EF162A002AB7B8 /* FFT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2323B329EF162A002AB7B8 /* FFT.swift */; };
+		1C2323B629EF75B1002AB7B8 /* Signal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2323B529EF75B1002AB7B8 /* Signal.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		1C2323AD29EF0A32002AB7B8 /* String+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		1C2323B129EF0ACE002AB7B8 /* MusicItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicItem.swift; sourceTree = "<group>"; };
 		1C2323B329EF162A002AB7B8 /* FFT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFT.swift; sourceTree = "<group>"; };
+		1C2323B529EF75B1002AB7B8 /* Signal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signal.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				1C2323B329EF162A002AB7B8 /* FFT.swift */,
+				1C2323B529EF75B1002AB7B8 /* Signal.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -223,6 +226,7 @@
 				1C2323AA29EF0A1F002AB7B8 /* ContentViewModel.swift in Sources */,
 				1C2323B229EF0ACE002AB7B8 /* MusicItem.swift in Sources */,
 				1C2323A629EF09FE002AB7B8 /* ShootingStarAppModel.swift in Sources */,
+				1C2323B629EF75B1002AB7B8 /* Signal.swift in Sources */,
 				1C2323B429EF162A002AB7B8 /* FFT.swift in Sources */,
 				1C23239629EF0991002AB7B8 /* ContentView.swift in Sources */,
 				1C2323AF29EF0A32002AB7B8 /* String+Extensions.swift in Sources */,
