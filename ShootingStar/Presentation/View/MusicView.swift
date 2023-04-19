@@ -24,7 +24,7 @@ struct MusicView<MVM: MusicViewModel>: View {
                 Chart {
                     ForEach(0 ..< 128, id: \.self) { index in
                         BarMark(x: .value("x", 8 * index),
-                                y: .value("p",  128 + viewModel.values[8 * index]),
+                                y: .value("p",  128 + viewModel.fftValues[8 * index]),
                                 width: .fixed(1))
                     }
                     .foregroundStyle(.linearGradient(colors: [.green, .yellow, .red],
@@ -43,7 +43,7 @@ struct MusicView<MVM: MusicViewModel>: View {
                     Chart {
                         Plot {
                             ForEach(viewModel.points) { point in
-                                let value = 1.0 + (Double(viewModel.values[point.index]) / 128.0)
+                                let value = 1.0 + (Double(viewModel.fftValues[point.index]) / 128.0)
                                 PointMark(x: .value("x", point.x), y: .value("y", point.y))
                                     .symbol(Rect(angle: point.angle, length: value))
                                     .foregroundStyle(Color(hue: value, saturation: 1, brightness: 1))

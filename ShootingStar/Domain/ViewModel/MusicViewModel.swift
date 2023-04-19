@@ -11,7 +11,7 @@ import Foundation
 
 protocol MusicViewModel: ObservableObject {
     var music: MusicItem { get set }
-    var values: [Float] { get set }
+    var fftValues: [Float] { get set }
     var rmsValue: Double { get set }
     var graphType: GraphType { get set }
     var dotAngle: Double { get set }
@@ -24,7 +24,7 @@ protocol MusicViewModel: ObservableObject {
 
 final class MusicViewModelImpl: MusicViewModel {
     @Published var music: MusicItem
-    @Published var values: [Float]
+    @Published var fftValues: [Float]
     @Published var rmsValue: Double = 0.3
     @Published var graphType: GraphType = .horizontal
     @Published var dotAngle: Double = 0
@@ -37,7 +37,7 @@ final class MusicViewModelImpl: MusicViewModel {
 
     init(music: MusicItem) {
         self.music = music
-        values = Array<Float>(repeating: 0, count: SAMPLING_HALF)
+        fftValues = Array<Float>(repeating: 0, count: SAMPLING_HALF)
         points = (0 ..< 128).map { i in
             let angle = Double(i) / Double(64) * Double.pi
             return Point(index: 8 * i, angle: angle, x: cos(angle), y: sin(angle))
@@ -51,7 +51,7 @@ final class MusicViewModelImpl: MusicViewModel {
         let bfr = UnsafePointer(data.pointee)
         Task { @MainActor [weak self] in
             if let self {
-                self.values = self.fft.computeFFT(bfr)
+                self.fftValues = self.fft.computeFFT(bfr)
                 self.rmsValue = self.signal.computeRMS(bfr, frameLength: frameLength)
             }
         }
@@ -94,7 +94,7 @@ final class MusicViewModelImpl: MusicViewModel {
 extension PreviewMock {
     final class MusicViewModelMock: MusicViewModel {
         @Published var music = MusicItem(id: "", assetURL: nil, title: nil)
-        @Published var values: [Float] = []
+        @Published var fftValues: [Float] = []
         @Published var rmsValue: Double = 0.3
         @Published var graphType: GraphType = .horizontal
         @Published var dotAngle: Double = 0
