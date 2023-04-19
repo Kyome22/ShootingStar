@@ -13,6 +13,9 @@ protocol MusicViewModel: ObservableObject {
     var music: MusicItem { get set }
     var values: [Float] { get set }
     var rmsValue: Double { get set }
+    var graphType: GraphType { get set }
+    var dotAngle: Double { get set }
+    var points: [Point] { get }
 
     init(music: MusicItem)
     func playMusic()
@@ -23,6 +26,9 @@ final class MusicViewModelImpl: MusicViewModel {
     @Published var music: MusicItem
     @Published var values: [Float]
     @Published var rmsValue: Double = 0.3
+    @Published var graphType: GraphType = .horizontal
+    @Published var dotAngle: Double = 0
+    let points: [Point]
 
     private lazy var playerNode = AVAudioPlayerNode()
     private lazy var audioEngine = AVAudioEngine()
@@ -32,6 +38,10 @@ final class MusicViewModelImpl: MusicViewModel {
     init(music: MusicItem) {
         self.music = music
         values = Array<Float>(repeating: 0, count: SAMPLING_HALF)
+        points = (0 ..< 128).map { i in
+            let angle = Double(i) / Double(64) * Double.pi
+            return Point(index: 8 * i, angle: angle, x: cos(angle), y: sin(angle))
+        }
         audioEngine.attach(playerNode)
     }
 
@@ -86,6 +96,9 @@ extension PreviewMock {
         @Published var music = MusicItem(id: "", assetURL: nil, title: nil)
         @Published var values: [Float] = []
         @Published var rmsValue: Double = 0.3
+        @Published var graphType: GraphType = .horizontal
+        @Published var dotAngle: Double = 0
+        var points = [Point]()
 
         init(music: MusicItem) {}
         func playMusic() {}

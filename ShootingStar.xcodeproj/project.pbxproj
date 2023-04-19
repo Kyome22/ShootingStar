@@ -20,6 +20,8 @@
 		1C2323B629EF75B1002AB7B8 /* Signal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2323B529EF75B1002AB7B8 /* Signal.swift */; };
 		1C2323B829F02F94002AB7B8 /* MusicViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2323B729F02F94002AB7B8 /* MusicViewModel.swift */; };
 		1C2323BA29F02FA8002AB7B8 /* MusicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2323B929F02FA8002AB7B8 /* MusicView.swift */; };
+		1C2323BC29F047BD002AB7B8 /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2323BB29F047BD002AB7B8 /* Point.swift */; };
+		1C2323BE29F05EA7002AB7B8 /* GraphType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2323BD29F05EA7002AB7B8 /* GraphType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +39,8 @@
 		1C2323B529EF75B1002AB7B8 /* Signal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signal.swift; sourceTree = "<group>"; };
 		1C2323B729F02F94002AB7B8 /* MusicViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicViewModel.swift; sourceTree = "<group>"; };
 		1C2323B929F02FA8002AB7B8 /* MusicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicView.swift; sourceTree = "<group>"; };
+		1C2323BB29F047BD002AB7B8 /* Point.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
+		1C2323BD29F05EA7002AB7B8 /* GraphType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +158,8 @@
 			isa = PBXGroup;
 			children = (
 				1C2323B129EF0ACE002AB7B8 /* MusicItem.swift */,
+				1C2323BB29F047BD002AB7B8 /* Point.swift */,
+				1C2323BD29F05EA7002AB7B8 /* GraphType.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -236,9 +242,11 @@
 				1C2323A629EF09FE002AB7B8 /* ShootingStarAppModel.swift in Sources */,
 				1C2323B629EF75B1002AB7B8 /* Signal.swift in Sources */,
 				1C2323B429EF162A002AB7B8 /* FFT.swift in Sources */,
+				1C2323BC29F047BD002AB7B8 /* Point.swift in Sources */,
 				1C23239629EF0991002AB7B8 /* ContentView.swift in Sources */,
 				1C2323AF29EF0A32002AB7B8 /* String+Extensions.swift in Sources */,
 				1C23239429EF0991002AB7B8 /* ShootingStarApp.swift in Sources */,
+				1C2323BE29F05EA7002AB7B8 /* GraphType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
