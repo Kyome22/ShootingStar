@@ -18,6 +18,8 @@
 		1C2323B229EF0ACE002AB7B8 /* MusicItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2323B129EF0ACE002AB7B8 /* MusicItem.swift */; };
 		1C2323B429EF162A002AB7B8 /* FFT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2323B329EF162A002AB7B8 /* FFT.swift */; };
 		1C2323B629EF75B1002AB7B8 /* Signal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2323B529EF75B1002AB7B8 /* Signal.swift */; };
+		1C2323B829F02F94002AB7B8 /* MusicViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2323B729F02F94002AB7B8 /* MusicViewModel.swift */; };
+		1C2323BA29F02FA8002AB7B8 /* MusicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2323B929F02FA8002AB7B8 /* MusicView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +35,8 @@
 		1C2323B129EF0ACE002AB7B8 /* MusicItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicItem.swift; sourceTree = "<group>"; };
 		1C2323B329EF162A002AB7B8 /* FFT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFT.swift; sourceTree = "<group>"; };
 		1C2323B529EF75B1002AB7B8 /* Signal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signal.swift; sourceTree = "<group>"; };
+		1C2323B729F02F94002AB7B8 /* MusicViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicViewModel.swift; sourceTree = "<group>"; };
+		1C2323B929F02FA8002AB7B8 /* MusicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				1C2323A929EF0A1F002AB7B8 /* ContentViewModel.swift */,
+				1C2323B729F02F94002AB7B8 /* MusicViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -140,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				1C23239529EF0991002AB7B8 /* ContentView.swift */,
+				1C2323B929F02FA8002AB7B8 /* MusicView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -222,8 +228,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C2323B829F02F94002AB7B8 /* MusicViewModel.swift in Sources */,
 				1C2323AE29EF0A32002AB7B8 /* Utils.swift in Sources */,
 				1C2323AA29EF0A1F002AB7B8 /* ContentViewModel.swift in Sources */,
+				1C2323BA29F02FA8002AB7B8 /* MusicView.swift in Sources */,
 				1C2323B229EF0ACE002AB7B8 /* MusicItem.swift in Sources */,
 				1C2323A629EF09FE002AB7B8 /* ShootingStarAppModel.swift in Sources */,
 				1C2323B629EF75B1002AB7B8 /* Signal.swift in Sources */,

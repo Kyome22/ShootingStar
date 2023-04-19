@@ -1,0 +1,94 @@
+/*
+  MusicViewModel.swift
+  ShootingStar
+
+  Created by Takuto Nakamura on 2023/04/19.
+  
+*/
+
+import AVFoundation
+import Foundation
+
+protocol MusicViewModel: ObservableObject {
+    var music: MusicItem { get set }
+    var values: [Float] { get set }
+    var rmsValue: Double { get set }
+
+    init(music: MusicItem)
+    func playMusic()
+    func stopMusic()
+}
+
+final class MusicViewModelImpl: MusicViewModel {
+    @Published var music: MusicItem
+    @Published var values: [Float]
+    @Published var rmsValue: Double = 0.3
+
+    private lazy var playerNode = AVAudioPlayerNode()
+    private lazy var audioEngine = AVAudioEngine()
+    private let fft = FFTImpl(length: SAMPLING)
+    private let signal = SignalImpl()
+
+    init(music: MusicItem) {
+        self.music = music
+        values = Array<Float>(repeating: 0, count: SAMPLING_HALF)
+        audioEngine.attach(playerNode)
+    }
+
+    private func calculate(_ buffer: AVAudioPCMBuffer) {
+        guard let data = buffer.floatChannelData else { return }
+        let frameLength = UInt(buffer.frameLength)
+        let bfr = UnsafePointer(data.pointee)
+        Task { @MainActor [weak self] in
+            if let self {
+                self.values = self.fft.computeFFT(bfr)
+                self.rmsValue = self.signal.computeRMS(bfr, frameLength: frameLength)
+            }
+        }
+    }
+
+    func playMusic() {
+        stopMusic()
+        if let assetURl = music.assetURL {
+            do {
+                let audioFile = try AVAudioFile(forReading: assetURl)
+                audioEngine.connect(playerNode,
+                                    to: audioEngine.mainMixerNode,
+                                    format: audioFile.processingFormat)
+                playerNode.installTap(
+                    onBus: 0,
+                    bufferSize: AVAudioFrameCount(SAMPLING),
+                    format: nil
+                ) { [weak self] buffer, _ in
+                    self?.calculate(buffer)
+                }
+                playerNode.scheduleFile(audioFile, at: nil)
+                try audioEngine.start()
+                playerNode.play()
+            } catch {
+                logput(error.localizedDescription)
+            }
+        }
+    }
+
+    func stopMusic() {
+        if audioEngine.isRunning && playerNode.isPlaying {
+            playerNode.stop()
+            playerNode.removeTap(onBus: 0)
+            audioEngine.stop()
+        }
+    }
+}
+
+// MARK: - Preview Mock
+extension PreviewMock {
+    final class MusicViewModelMock: MusicViewModel {
+        @Published var music = MusicItem(id: "", assetURL: nil, title: nil)
+        @Published var values: [Float] = []
+        @Published var rmsValue: Double = 0.3
+
+        init(music: MusicItem) {}
+        func playMusic() {}
+        func stopMusic() {}
+    }
+}
