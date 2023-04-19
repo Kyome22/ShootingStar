@@ -18,13 +18,28 @@ struct MusicView<MVM: MusicViewModel>: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            Spacer()
             switch viewModel.graphType {
-            case .horizontal:
+            case .line:
+                Chart {
+                    let lineWidth = 2.0 * viewModel.rmsValue
+                    ForEach(0 ..< 128, id: \.self) { index in
+                        LineMark(x: .value("x", index),
+                                 y: .value("y", viewModel.values[index]))
+                        .lineStyle(StrokeStyle(lineWidth: lineWidth))
+                        .interpolationMethod(.cardinal)
+                    }
+                    .foregroundStyle(.linearGradient(colors: [.green, .yellow, .red],
+                                                     startPoint: .bottom,
+                                                     endPoint: .top))
+                    .alignsMarkStylesWithPlotArea()
+                }
+                .chartXAxis(.hidden)
+                .chartYAxis(.hidden)
+            case .bar:
                 Chart {
                     ForEach(0 ..< 128, id: \.self) { index in
                         BarMark(x: .value("x", 8 * index),
-                                y: .value("p",  128 + viewModel.fftValues[8 * index]),
+                                y: .value("y", 128 + viewModel.fftValues[8 * index]),
                                 width: .fixed(1))
                     }
                     .foregroundStyle(.linearGradient(colors: [.green, .yellow, .red],
@@ -36,32 +51,33 @@ struct MusicView<MVM: MusicViewModel>: View {
                 .chartYScale(domain: 0 ... 128)
                 .chartXAxis(.hidden)
                 .chartYAxis(.hidden)
-                .opacity(viewModel.rmsValue)
-                .aspectRatio(1, contentMode: .fit)
             case .circle:
-                ZStack {
-                    Chart {
-                        Plot {
-                            ForEach(viewModel.points) { point in
-                                let value = 1.0 + (Double(viewModel.fftValues[point.index]) / 128.0)
-                                PointMark(x: .value("x", point.x), y: .value("y", point.y))
-                                    .symbol(Rect(angle: point.angle, length: value))
-                                    .foregroundStyle(Color(hue: value, saturation: 1, brightness: 1))
+                GeometryReader { geometry in
+                    let length = geometry.size.minLength
+                    ZStack {
+                        Chart {
+                            Plot {
+                                ForEach(viewModel.points) { point in
+                                    let value = 1.0 + (Double(viewModel.fftValues[point.index]) / 128.0)
+                                    PointMark(x: .value("x", point.x), y: .value("y", point.y))
+                                        .symbol(Rect(angle: point.angle, length: value))
+                                        .foregroundStyle(Color(hue: value, saturation: 1, brightness: 1))
+                                }
                             }
                         }
+                        .chartXScale(domain: -2 ... 2)
+                        .chartYScale(domain: -2 ... 2)
+                        .chartXAxis(.hidden)
+                        .chartYAxis(.hidden)
+                        .frame(width: length, height: length)
+                        Circle()
+                            .frame(width: 0.6 * length, height: 0.6 * length)
+                            .foregroundColor(.secondary)
+                            .scaleEffect(viewModel.rmsValue)
                     }
-                    .chartXScale(domain: -2 ... 2)
-                    .chartYScale(domain: -2 ... 2)
-                    .chartXAxis(.hidden)
-                    .chartYAxis(.hidden)
-                    .aspectRatio(1, contentMode: .fit)
-                    Circle()
-                        .frame(width: 200, height: 200)
-                        .foregroundColor(.secondary)
-                        .scaleEffect(viewModel.rmsValue)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
-            Spacer()
             Picker("", selection: $viewModel.graphType) {
                 ForEach(GraphType.allCases) { graphType in
                     Text(graphType.rawValue).tag(graphType)
@@ -69,6 +85,7 @@ struct MusicView<MVM: MusicViewModel>: View {
             }
             .pickerStyle(.segmented)
         }
+        .frame(alignment: .center)
         .padding(16)
         .navigationTitle(viewModel.music.title ?? "unknown title")
         .navigationBarTitleDisplayMode(.inline)

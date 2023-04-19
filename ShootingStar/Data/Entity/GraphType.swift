@@ -9,7 +9,8 @@
 import Foundation
 
 enum GraphType: String, CaseIterable, Identifiable {
-    case horizontal = "Horizontal"
+    case line = "Line"
+    case bar = "Bar"
     case circle = "Circle"
 
     var id: String { return rawValue }

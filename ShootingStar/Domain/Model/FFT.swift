@@ -43,7 +43,7 @@ final class FFTImpl: FFT {
 
     func computeFFT(_ inAudioData: UnsafePointer<Float>) -> [Float] {
         guard let fftSetup else {
-            return [Float](repeating: 0, count: Int(fftHalfLength))
+            return Array<Float>(repeating: 0, count: Int(fftHalfLength))
         }
         let window = FloatPointer.allocate(capacity: Int(fftFullLength))
         vDSP_hann_window(window, fftFullLength, Int32(vDSP_HANN_NORM))

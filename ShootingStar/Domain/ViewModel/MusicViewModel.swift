@@ -11,6 +11,7 @@ import Foundation
 
 protocol MusicViewModel: ObservableObject {
     var music: MusicItem { get set }
+    var values: [Float] { get set }
     var fftValues: [Float] { get set }
     var rmsValue: Double { get set }
     var graphType: GraphType { get set }
@@ -24,9 +25,10 @@ protocol MusicViewModel: ObservableObject {
 
 final class MusicViewModelImpl: MusicViewModel {
     @Published var music: MusicItem
+    @Published var values: [Float]
     @Published var fftValues: [Float]
     @Published var rmsValue: Double = 0.3
-    @Published var graphType: GraphType = .horizontal
+    @Published var graphType: GraphType = .line
     @Published var dotAngle: Double = 0
     let points: [Point]
 
@@ -37,6 +39,7 @@ final class MusicViewModelImpl: MusicViewModel {
 
     init(music: MusicItem) {
         self.music = music
+        values = Array<Float>(repeating: 0, count: 128)
         fftValues = Array<Float>(repeating: 0, count: SAMPLING_HALF)
         points = (0 ..< 128).map { i in
             let angle = Double(i) / Double(64) * Double.pi
@@ -51,6 +54,7 @@ final class MusicViewModelImpl: MusicViewModel {
         let bfr = UnsafePointer(data.pointee)
         Task { @MainActor [weak self] in
             if let self {
+                self.values = Array<Float>(UnsafeBufferPointer(start: data.pointee, count: Int(frameLength)))
                 self.fftValues = self.fft.computeFFT(bfr)
                 self.rmsValue = self.signal.computeRMS(bfr, frameLength: frameLength)
             }
@@ -94,9 +98,10 @@ final class MusicViewModelImpl: MusicViewModel {
 extension PreviewMock {
     final class MusicViewModelMock: MusicViewModel {
         @Published var music = MusicItem(id: "", assetURL: nil, title: nil)
+        @Published var values: [Float] = []
         @Published var fftValues: [Float] = []
         @Published var rmsValue: Double = 0.3
-        @Published var graphType: GraphType = .horizontal
+        @Published var graphType: GraphType = .line
         @Published var dotAngle: Double = 0
         var points = [Point]()
 
