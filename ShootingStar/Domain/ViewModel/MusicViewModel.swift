@@ -52,9 +52,10 @@ final class MusicViewModelImpl: MusicViewModel {
         guard let data = buffer.floatChannelData else { return }
         let frameLength = UInt(buffer.frameLength)
         let bfr = UnsafePointer(data.pointee)
+        let array = Array<Float>(UnsafeBufferPointer(start: data.pointee, count: Int(frameLength)))
         Task { @MainActor [weak self] in
             if let self {
-                self.values = Array<Float>(UnsafeBufferPointer(start: data.pointee, count: Int(frameLength)))
+                self.values = array
                 self.fftValues = self.fft.computeFFT(bfr)
                 self.rmsValue = self.signal.computeRMS(bfr, frameLength: frameLength)
             }

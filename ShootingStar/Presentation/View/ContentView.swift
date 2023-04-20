@@ -23,13 +23,8 @@ struct ContentView<CVM: ContentViewModel>: View {
                 NavigationLink(destination: MusicView<MusicViewModelImpl>(music: music)) {
                     HStack(alignment: .top) {
                         Image(systemName: "music.note.list")
-                        VStack(alignment: .leading) {
-                            Text(music.title ?? "unknown title")
-                                .font(.body)
-                            Text(music.id)
-                                .font(.callout)
-                                .foregroundColor(.secondary)
-                        }
+                        Text(music.title ?? "unknown title")
+                            .font(.body)
                     }
                 }
             }
