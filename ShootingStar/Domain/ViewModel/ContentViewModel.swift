@@ -14,6 +14,7 @@ let SAMPLING: Int = 2048
 let SAMPLING_HALF: Int = 1024
 
 protocol ContentViewModel: ObservableObject {
+    var searchText: String { get set }
     var musics: [MusicItem] { get set }
 
     init()
@@ -21,6 +22,7 @@ protocol ContentViewModel: ObservableObject {
 }
 
 final class ContentViewModelImpl: ContentViewModel {
+    @Published var searchText: String = ""
     @Published var musics: [MusicItem] = []
 
     init() {
@@ -63,6 +65,7 @@ final class ContentViewModelImpl: ContentViewModel {
 // MARK: - Preview Mock
 extension PreviewMock {
     final class ContentViewModelMock: ContentViewModel {
+        @Published var searchText: String = ""
         @Published var musics: [MusicItem] = []
 
         init() {}
