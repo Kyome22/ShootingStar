@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1869D38529F10D3D00665883 /* RectSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1869D38429F10D3D00665883 /* RectSymbol.swift */; };
 		1C23239429EF0991002AB7B8 /* ShootingStarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C23239329EF0991002AB7B8 /* ShootingStarApp.swift */; };
 		1C23239629EF0991002AB7B8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C23239529EF0991002AB7B8 /* ContentView.swift */; };
 		1C23239829EF0991002AB7B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1C23239729EF0991002AB7B8 /* Assets.xcassets */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1869D38429F10D3D00665883 /* RectSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectSymbol.swift; sourceTree = "<group>"; };
 		1C23239029EF0991002AB7B8 /* ShootingStar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShootingStar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C23239329EF0991002AB7B8 /* ShootingStarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShootingStarApp.swift; sourceTree = "<group>"; };
 		1C23239529EF0991002AB7B8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 			children = (
 				1C23239529EF0991002AB7B8 /* ContentView.swift */,
 				1C2323B929F02FA8002AB7B8 /* MusicView.swift */,
+				1869D38429F10D3D00665883 /* RectSymbol.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 				1C2323B829F02F94002AB7B8 /* MusicViewModel.swift in Sources */,
 				1C2323AE29EF0A32002AB7B8 /* Utils.swift in Sources */,
 				1C2323AA29EF0A1F002AB7B8 /* ContentViewModel.swift in Sources */,
+				1869D38529F10D3D00665883 /* RectSymbol.swift in Sources */,
 				1C2323BA29F02FA8002AB7B8 /* MusicView.swift in Sources */,
 				1C2323B229EF0ACE002AB7B8 /* MusicItem.swift in Sources */,
 				1C2323A629EF09FE002AB7B8 /* ShootingStarAppModel.swift in Sources */,

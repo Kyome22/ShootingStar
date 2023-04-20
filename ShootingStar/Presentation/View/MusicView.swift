@@ -63,7 +63,7 @@ struct MusicView<MVM: MusicViewModel>: View {
                                 ForEach(viewModel.points) { point in
                                     let value = 1.0 + (Double(viewModel.fftValues[point.index]) / 128.0)
                                     PointMark(x: .value("x", point.x), y: .value("y", point.y))
-                                        .symbol(Rect(angle: point.angle, length: value))
+                                        .symbol(RectSymbol(angle: point.angle, length: value))
                                         .foregroundStyle(Color(hue: value, saturation: 1, brightness: 1))
                                 }
                             }
@@ -73,8 +73,10 @@ struct MusicView<MVM: MusicViewModel>: View {
                         .chartXAxis(.hidden)
                         .chartYAxis(.hidden)
                         .frame(width: length, height: length)
+                        let hue = 0.16 + 0.57 * (1.0 - viewModel.rmsValue)
                         Circle()
                             .frame(width: 0.6 * length, height: 0.6 * length)
+                            .foregroundColor(Color(hue: hue, saturation: 1, brightness: 1))
                             .foregroundColor(.secondary)
                             .scaleEffect(viewModel.rmsValue)
                     }
@@ -107,22 +109,4 @@ struct MusicView_Previews: PreviewProvider {
     }
 }
 
-struct Rect: ChartSymbolShape {
-    let angle: CGFloat
-    let length: CGFloat
 
-    init(angle: CGFloat, length: CGFloat) {
-        self.angle = angle
-        self.length = length
-    }
-
-    var perceptualUnitRect: CGRect {
-        return CGRect(x: 0, y: 0, width: 1, height: 1)
-    }
-
-    func path(in rect: CGRect) -> Path {
-        return Path(CGRect(x: 0, y: -1, width: 100 * length, height: 2))
-            .applying(.init(rotationAngle: -angle))
-            .applying(.init(translationX: rect.midX, y: rect.midY))
-    }
-}
