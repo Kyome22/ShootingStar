@@ -3,7 +3,7 @@
   ShootingStar
 
   Created by Takuto Nakamura on 2023/04/19.
-  
+  Refer to https://github.com/ooper-shlab/aurioTouch2.0-Swift/blob/master/Classes/FFTHelper.swift
 */
 
 import Accelerate
@@ -26,7 +26,7 @@ final class FFTImpl: FFT {
     init(length: Int) {
         fftFullLength = vDSP_Length(length)
         fftHalfLength = vDSP_Length(length / 2)
-        fftNormFactor = 1.0 / Float(length)
+        fftNormFactor = 1.0 / Float(2 * length)
         dspSplitComplex = DSPSplitComplex(
             realp: FloatPointer.allocate(capacity: length / 2),
             imagp: FloatPointer.allocate(capacity: length / 2)
